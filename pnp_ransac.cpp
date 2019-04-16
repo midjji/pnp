@@ -32,7 +32,7 @@ PoseD pnp_ransac(const std::vector<cvl::Vector3D>& xs,
  * set best_inliers to 0 to compute the exact count...
  *
  */
-int evaluate_inlier_set(const std::vector<cvl::Vector3D>& xs,
+uint evaluate_inlier_set(const std::vector<cvl::Vector3D>& xs,
                         const std::vector<cvl::Vector2D>& yns,
                         double threshold,
                         PoseD pose,
@@ -225,7 +225,7 @@ PoseD PNP::compute(){
 
 
     // refine pose, if possible...
-    //if(best_inliers>3)        refine();
+    if(best_inliers>3)        refine();
     return best_pose; // will be identity if a complete failure...
 }
 
