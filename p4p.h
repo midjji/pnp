@@ -37,8 +37,9 @@ namespace cvl{
  *
  * this is the simplest imaginable version of this,
  * the pose will fit the first 3 perfectly and the last if it feels like it.
+ * if the measurements are colinear or otherwise degenerate a identity pose is returned.
  *
- * This is suitable for low outlieratios, <50%, and low noise. Otherwize use something better...
+ * This is suitable for low outlieratios, <50%, and low noise.
  *
  */
 PoseD p4p(const std::vector<cvl::Vector3D>& xs,

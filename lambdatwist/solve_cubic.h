@@ -14,13 +14,7 @@ namespace cvl{
 template<class T> inline bool root2real(T b, T c,T& r1, T& r2){
 
 
-#if 0
-    T v=b*b -4.0*c;
-    T y=std::sqrt(v);
-    r1= 0.5*(-b+y);
-    r2= 0.5*(-b-y);
-    return v>=0;
-#else
+
     T v=b*b -4.0*c;
     if(v<0){
         r1=r2=0.5*b;
@@ -37,24 +31,28 @@ template<class T> inline bool root2real(T b, T c,T& r1, T& r2){
         r2= 2.0*c/(-b-y);
     }
     return true;
-#endif
-}
-
-template<class T> void root2real1(T a, T b, T c, T& r1, T& r2){
-
-    T y=std::sqrt(b*b -4.0*a*c);
-    if(b<0){
-
-        r1= (-b+y)/(2.0*a);
-        r2= (-b-y)/(2.0*a);
-
-    }else{
-        r1= 2.0*c/(-b+y);
-        r2= 2.0*c/(-b-y);
-    }
 }
 
 
+template<class T> constexpr T get_numeric_limit(){ return 1e-13;
+    /*
+                                            cout<<"ef: "<<std::numeric_limits<float>::max_digits10<<endl;
+    cout<<"ed: "<<std::numeric_limits<double>::max_digits10<<endl;
+    cout<<"el: "<<std::numeric_limits<long double>::max_digits10<<endl;
+*/
+}
+template<> constexpr float get_numeric_limit<float>(){
+    // abs limit is 9 digits
+    return 1e-7;
+}
+template<> constexpr double get_numeric_limit<double>(){
+    // abs limit is 17 digits
+    return 1e-13;
+}
+template<> constexpr long double get_numeric_limit<long double>(){
+    // abs limit is 21 digits
+    return 1e-15 ;
+}
 
 #define CountCubic 0
 
