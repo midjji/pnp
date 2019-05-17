@@ -36,7 +36,13 @@
 
 
 namespace cvl {
-
+/**
+ * @brief pnp_ransac returns Pcw such that X_cam=Pcw*X_world
+ * @param xs 3d point in world coordinates
+ * @param yns normalized camera measurements
+ * @param params, note adjust threshold if neccesary
+ * @return
+ */
 PoseD pnp_ransac(const std::vector<cvl::Vector3D>& xs,
                  const std::vector<cvl::Vector2D>& yns,
                  PnpParams params=PnpParams());

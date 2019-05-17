@@ -34,18 +34,18 @@ namespace cvl{
  * @param yns, size equal to xs
  * @param indexes, elements in xs, yns
  * @return the Pose which best fits all four.
+ * y=project(P*xs)
  *
  * this is the simplest imaginable version of this,
  * the pose will fit the first 3 perfectly and the last if it feels like it.
  * if the measurements are colinear or otherwise degenerate a identity pose is returned.
  *
  * This is suitable for low outlieratios, <50%, and low noise.
- *
+ * the use of std::vector is convenient not fast.
  */
 PoseD p4p(const std::vector<cvl::Vector3D>& xs,
          const std::vector<cvl::Vector2D>& yns,
           Vector4<uint> indexes);
-
 
 
 }// end namespace cvl
