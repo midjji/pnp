@@ -1085,7 +1085,7 @@ public:
         T absv=std::abs(A(0));
 
         for(unsigned int i=1;i<Rows*Cols;++i)
-            absv=+std::abs(A(i));
+            absv+=std::abs(A(i));
         return absv;
     }
     ///@return Elementwise absolute
