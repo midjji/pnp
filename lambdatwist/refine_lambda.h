@@ -77,9 +77,9 @@ void gauss_newton_refineL(Vector3<T>& L,
 
 
 
-                T l1=L(0);
-                T l2=L(1);
-                T l3=L(2);
+                T l1=L1(0);
+                T l2=L1(1);
+                T l3=L1(2);
                 T r11=l1*l1 + l2*l2 +b12*l1*l2 -a12;
                 T r12=l1*l1 + l3*l3 +b13*l1*l3 -a13;
                 T r13=l2*l2 + l3*l3 +b23*l2*l3 -a23;
