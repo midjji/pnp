@@ -254,7 +254,7 @@ int p3p_lambdatwist( Vector3<T> y1,
             if(tau1>0) {
                 T tau=tau1;
                 T d=a23/(tau*(b23 + tau) + T(1.0));
-                //if(d>=0||true){
+                if(d>0){
                 T l2=std::sqrt(d);
 
                 T l3=tau*l2;
@@ -264,12 +264,12 @@ int p3p_lambdatwist( Vector3<T> y1,
                     Ls[valid]={l1,l2,l3};
                     ++valid;
                 }
-                //}
+                }
             }
             if(tau2>0){
                 T tau=tau2;
                 T d=a23/(tau*(b23 + tau) + T(1.0));
-                //if(d>=0||true){ // never happens!
+                if(d>0){ 
                 T l2=std::sqrt(d);
 
                 T l3=tau*l2;
@@ -279,7 +279,7 @@ int p3p_lambdatwist( Vector3<T> y1,
                     Ls[valid]={l1,l2,l3};
                     ++valid;
                 }
-                //}
+                }
             }
         }
     }
