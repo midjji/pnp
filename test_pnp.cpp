@@ -82,10 +82,11 @@ void testPnp(PNP_test* pnp){
     for(uint i=0;i<sigmas.size();++i){
 
 
+
         std::vector<double> errors;errors.reserve(experiments);
         std::vector<int> iters;iters.reserve(experiments);
         for(int e=0;e<experiments;++e){
-            PointCloudWithNoisyMeasurements data(1000,sigmas[i],outliers);
+            PointCloudWithNoisyMeasurements data(250,sigmas[i],outliers);
 
             timers[i].tic();
             PoseD P=pnp->pnp(data.xs,data.yns);
@@ -156,10 +157,62 @@ TEST(PNP_RANSAC,LAMBDA){
 */
 
 
+void print_test_for_pybind(){
+    PointCloudWithNoisyMeasurements data(10,0,0);
+    std::cout<<"xs = np.array([";
+    for(int i=0;i<data.xs.size();++i){
+        std::cout<<"[";
+        for(int j=0;j<3;++j){
+            std::cout<< data.xs[i][j];
+            if(j!=2)
+                std::cout<<", ";
+        }
+        std::cout<<"]";
+        if(i!=data.xs.size()-1)
+            std::cout<<",";
+    }
+    std::cout<<"])\n";
+
+    std::cout<<"ys = np.array([";
+    for(int i=0;i<data.yns.size();++i){
+        std::cout<<"[";
+        for(int j=0;j<2;++j){
+            std::cout<< data.yns[i][j];
+            if(j!=1)
+                std::cout<<", ";
+        }
+        std::cout<<"]";
+        if(i!=data.yns.size()-1)
+            std::cout<<",";
+    }
+    std::cout<<"])\n";
+
+    std::cout<<"pose = np.array([";
+    for(int i=0;i<4;++i){
+
+
+        std::cout<< data.Pcw.q[i];
+
+            std::cout<<", ";
+    }
+
+    for(int i=0;i<3;++i){
+
+
+        std::cout<< data.Pcw.t[i];
+        if(i!=2)
+            std::cout<<", ";
+    }
+    std::cout<<"])\n";
+
+
+
+}
+
 
 int main(int argc, char **argv) {
     PNP_lambda pnp;
     testPnp(&pnp);
     //testing::InitGoogleTest(&argc, argv);    return RUN_ALL_TESTS();
-
+print_test_for_pybind();
 }
