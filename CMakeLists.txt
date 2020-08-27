@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 PROJECT(lambdatwist-pnp CXX) # defines ${CMAKE_PROJECT_NAME}(top level) PROJECT_NAME(most recent)
-
+add_subdirectory(pybind11)
 
 
 
@@ -75,6 +75,10 @@ list(APPEND util-srcs utils/cvl/matrix.h)
 list(APPEND util-srcs utils/cvl/pose.h)
 list(APPEND util-srcs utils/cvl/rotation_helpers.h)
 
+list(APPEND util-srcs pnp_python_binding.h)
+
+#list(APPEND util-srcs pnp.h)
+
 
 print_list("utils" util-srcs)
 #file(GLOB_RECURSE utils2 )
@@ -85,10 +89,19 @@ print_list("utils" util-srcs)
 #list(APPEND util-srcs mnumerics.h)
 #list(APPEND util-srcs p3p_generator.h)
 
-# headers are included for ide benefit...
-add_executable(main test_pnp.cpp ${util-srcs} ${lambdatwist-srcs} pnp_ransac.cpp p4p.cpp)
-target_link_libraries(main ${CERES_LIBRARIES})
+add_library(libpnp SHARED ${util-srcs} ${lambdatwist-srcs} pnp_ransac.cpp p4p.cpp)
+target_link_libraries(libpnp ${CERES_LIBRARIES})
 
+# headers are included for ide benefit...
+add_executable(main test_pnp.cpp)
+target_link_libraries(main libpnp)
+
+
+
+# Build pybind11 bindinis
+pybind11_add_module(pnp_python_binding pnp_python_binding.cpp)
+target_link_libraries(pnp_python_binding PUBLIC libpnp ${CERES_LIBRARIES})
+# OBS! Pybind11 require that you specify python exectuable to build for, e.g. cmake .. -DPYTHON_EXECUTABLE=python3
 
 
 message("================================================================================")

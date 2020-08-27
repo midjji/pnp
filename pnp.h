@@ -22,18 +22,10 @@
  *
  ******************************************************************************/
 
-#include "mlib/utils/cvl/pose.h"
+#include "utils/cvl/pose.h"
 
 
 namespace cvl{
-
-PoseD pnp_ransac(const std::vector<cvl::Vector3d>& xs,
-                 const std::vector<cvl::Vector2d>& yns,
-                 PnpParams params=PnpParams());
-
-
-PoseD pnp(const std::vector<cvl::Vector3d>& xs, const std::vector<cvl::Vector2d>& yns, const PoseD& init, bool check_inliers=true);
-
 
 /**
  * @brief The PNPParams class
@@ -89,6 +81,12 @@ public:
 };
 
 
+PoseD pnp_ransac(const std::vector<cvl::Vector3d>& xs,
+                 const std::vector<cvl::Vector2d>& yns,
+                 PnpParams params=PnpParams());
+
+
+PoseD pnp(const std::vector<cvl::Vector3d>& xs, const std::vector<cvl::Vector2d>& yns, const PoseD& init, bool check_inliers=true);
 
 
 
