@@ -17,8 +17,13 @@ target_include_directories(libpnp PRIVATE ${CERES_INCLUDE_DIRS})
 target_link_libraries(libpnp ${CERES_LIBRARIES})
 target_compile_features(libpnp PUBLIC cxx_std_11)
 
-add_executable(main test_pnp.cpp)
-target_link_libraries(main libpnp)
+
+option(LIB_ONLY "Build only the library" OFF)
+
+if(NOT LIB_ONLY)
+    add_executable(main test_pnp.cpp)
+    target_link_libraries(main libpnp)
+endif()
 
 
 option(WITH_PYBIND11 "with pybind11 bindings" OFF)
