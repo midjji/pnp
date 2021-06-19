@@ -27,14 +27,12 @@ BuildConfig()
 # can cause eigen3 lookup failures.
 find_package(Ceres 2 REQUIRED )
 
+
+
+
+
 add_library(libpnp utils/mlibtime.cpp pnp_ransac.cpp p4p.cpp)
-target_link_libraries(libpnp PUBLIC ceres)
-
-
-# the compiler does not care about having multiple equivalent but distinct includes, but many ides do...
-get_filename_component(PNP_PATH ${CMAKE_CURRENT_SOURCE_DIR} REALPATH)
-target_include_directories(libpnp PUBLIC ${PNP_PATH})
-target_compile_features(libpnp PUBLIC cxx_std_11)
+target_link_libraries(libpnp PRIVATE ceres)
 
 option(PNP_RANDOM_SEED_FROM_TIME "generate a seed from time, default" OFF)
 if(PNP_RANDOM_SEED_FROM_TIME)
@@ -42,6 +40,12 @@ if(PNP_RANDOM_SEED_FROM_TIME)
 else()
     target_compile_definitions(libpnp PRIVATE "RANDOM_SEED_VALUE=0")
 endif()
+
+# the compiler does not care about having multiple equivalent but distinct includes, but many ides do...
+get_filename_component(PNP_PATH ${CMAKE_CURRENT_SOURCE_DIR} REALPATH)
+target_include_directories(libpnp PUBLIC ${PNP_PATH})
+target_compile_features(libpnp PUBLIC cxx_std_11)
+
 
 option(WITH_PYBIND11 "with pybind11 bindings" OFF)
 if(WITH_PYBIND11)
