@@ -1,5 +1,11 @@
 #include <iostream>
-#include <ceres/ceres.h>
+#include <ceres/problem.h>
+#include <ceres/jet.h>
+#include <ceres/loss_function.h>
+#include <ceres/autodiff_cost_function.h>
+#include <ceres/local_parameterization.h>
+#include <ceres/solver.h>
+
 
 #include <utils/mlibtime.h>
 #include <utils/random.h>
@@ -56,10 +62,6 @@ uint evaluate_inlier_set(const std::vector<cvl::Vector3D>& xs,
         cvl::Vector4D X=xs[i].homogeneous(); // yes even with the extra cost here...
 //        Vector3D XR=(M*X).dehom(); // technically based on how 4x4 etc work, no dehom required
         Vector4D XR=(M*X);
-        assert(std::abs(XR[3]-1)<1e-12);
-
-
-
 
         double x=XR[0];
         double y=XR[1];
@@ -120,14 +122,14 @@ public:
         // Get camera rotation and translation
         cvl::Pose<T> P(rotation,translation);
         //cvl::Matrix3x3<T> R=P.getR();
-        cvl::Matrix4x4<T> M=P.get4x4();
+        cvl::Matrix4x4<T> M=P.get4x4(); // surprisingly faster
         //cvl::Vector3<T> tr(translation,true);
         for (uint i = 0; i < xs.size(); ++i) {
 
             cvl::Vector4<T> x=xs[i].homogeneous();
+            cvl::Vector4<T> xr=M*x;  //known 1 at the end
+            T iz=T(1.0/xr[2]);
 
-            cvl::Vector4<T> xr=M*x;
-            T iz=ceres::abs(T(1.0/xr[2]));
 
             residuals[0]   = xr[0] *iz - T(yns[i][0]);
             residuals[1] = xr[1] *iz - T(yns[i][1]);
@@ -250,7 +252,9 @@ void PNP::refine(){
         inlier_xs.clear();
         inlier_yns.clear();
         for(uint i=0;i<xs.size();++i){
-            if(((best_pose*xs[i]).dehom() - yns[i]).squaredNorm()>thr) continue;
+            Vector3d xr=best_pose*xs[i];
+            if(xr[2]<0) continue;
+            if(((xr).dehom() - yns[i]).squaredNorm()>thr) continue;
             inlier_xs.push_back(xs[i]);
             inlier_yns.push_back(yns[i]);
             inliers[i]=1;
@@ -286,7 +290,10 @@ void PNP::refine(){
         inlier_yns.clear();
         int deltas=0;
         for(uint i=0;i<xs.size();++i){
-            bool inlier=((best_pose*xs[i]).dehom() - yns[i]).squaredNorm()<thr;
+            Vector3d xr=best_pose*xs[i];
+            bool inlier=true;
+            if(xr[2]<0) inlier=false;
+            if(((xr).dehom() - yns[i]).squaredNorm()>thr) inlier=false;
             if(inlier ^ (inliers[i]==1)) deltas++;
             if(!inlier) continue;
             inlier_xs.push_back(xs[i]);

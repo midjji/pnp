@@ -6,6 +6,8 @@ message("Builing pnp")
 message("Recommended optimization flags for release:  -O3 -march=native -mtune=native -DNDEBUG")
 
 
+
+
 # Build configuration
 macro(BuildConfig)
 
@@ -25,11 +27,13 @@ BuildConfig()
 
 # note, ceres 1.4 works just fine too, but there is a bug in the cmakelists of ceres 1.4 which
 # can cause eigen3 lookup failures.
-message(" Ceres 1.4 works just fine too, but there are cmake errors in them which may cause eigen3 to not be found.")
+message(" Ceres 1.4 works just fine too, but there are cmake errors in them which may cause eigen3 to not be found. In that case add it manually, but be careful, as if ceres is built with one version of eigen, and then used in combination with another, this will cause segfaults inside ceres due to the idiotic ideas around aligned allocators,(just dont use them is the solution ceres and eigen does not appear to get)")
 find_package(Ceres 2 REQUIRED )
 
 add_library(libpnp utils/mlibtime.cpp pnp_ransac.cpp p4p.cpp)
 target_link_libraries(libpnp PRIVATE ceres)
+
+
 
 option(PNP_RANDOM_SEED_FROM_TIME "generate a seed from time, default" OFF)
 if(PNP_RANDOM_SEED_FROM_TIME)
@@ -42,6 +46,7 @@ endif()
 get_filename_component(PNP_PATH ${CMAKE_CURRENT_SOURCE_DIR} REALPATH)
 target_include_directories(libpnp PUBLIC ${PNP_PATH})
 target_compile_features(libpnp PUBLIC cxx_std_11)
+set_target_properties(libpnp PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 
 option(WITH_PYBIND11 "with pybind11 bindings" OFF)
