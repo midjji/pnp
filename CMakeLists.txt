@@ -25,11 +25,8 @@ BuildConfig()
 
 # note, ceres 1.4 works just fine too, but there is a bug in the cmakelists of ceres 1.4 which
 # can cause eigen3 lookup failures.
+message(" Ceres 1.4 works just fine too, but there are cmake errors in them which may cause eigen3 to not be found.")
 find_package(Ceres 2 REQUIRED )
-
-
-
-
 
 add_library(libpnp utils/mlibtime.cpp pnp_ransac.cpp p4p.cpp)
 target_link_libraries(libpnp PRIVATE ceres)
@@ -53,6 +50,7 @@ if(WITH_PYBIND11)
     add_subdirectory(pybind11)
     pybind11_add_module(pnp_python_binding pnp_python_binding.cpp)
     target_link_libraries(pnp_python_binding PUBLIC libpnp )
+    message("OBS! Pybind11 require that you specify python exectuable to build for, e.g. cmake .. -DPYTHON_EXECUTABLE=python3")
     # OBS! Pybind11 require that you specify python exectuable to build for, e.g. cmake .. -DPYTHON_EXECUTABLE=python3
 endif()
 
