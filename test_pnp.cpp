@@ -205,14 +205,24 @@ void print_test_for_pybind(){
     }
     std::cout<<"])\n";
 
+    PoseD Pgt(Vector4d(0.898801, -0.0515797, 0.40325, -0.16397).normalized(), Vector3d(0.947568, 0.258716, 0.187565));
+    auto M=Pgt.get4x4();
+    for(int r=0;r<4;++r){
+        for(int c=0;c<4;++c)
+            cout<<M(r,c)<<", ";
+        cout<<"\n";
+    }
+
 
 
 }
 
 
 int main(int argc, char **argv) {
+   // print_test_for_pybind();
+
     PNP_lambda pnp;
     testPnp(&pnp);
     //testing::InitGoogleTest(&argc, argv);    return RUN_ALL_TESTS();
-print_test_for_pybind();
+
 }
