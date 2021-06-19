@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 project(lambdatwist-pnp CXX) # defines ${CMAKE_PROJECT_NAME}(top level) PROJECT_NAME(most recent)
 
 message("================================================================================")
@@ -26,7 +26,7 @@ BuildConfig()
 
 
 find_package(Ceres REQUIRED )
-target_link_libraries(libpnp PUBLIC ${CERES_LIBRARIES})
+target_link_libraries(libpnp PUBLIC ceres)
 
 
 # the compiler does not care about having multiple equivalent but distinct includes, but many ides do...
@@ -46,7 +46,7 @@ if(WITH_PYBIND11)
     message("requires that submodules are inited! git submodule init && git submodule update")
     add_subdirectory(pybind11)
     pybind11_add_module(pnp_python_binding pnp_python_binding.cpp)
-    target_link_libraries(pnp_python_binding PUBLIC libpnp ${CERES_LIBRARIES})
+    target_link_libraries(pnp_python_binding PUBLIC libpnp )
     # OBS! Pybind11 require that you specify python exectuable to build for, e.g. cmake .. -DPYTHON_EXECUTABLE=python3
 endif()
 
