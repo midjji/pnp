@@ -4,7 +4,6 @@ project(lambdatwist-pnp CXX) # defines ${CMAKE_PROJECT_NAME}(top level) PROJECT_
 message("================================================================================")
 message("Builing pnp")
 message("Recommended optimization flags for release:  -O3 -march=native -mtune=native -DNDEBUG")
-add_library(libpnp utils/mlibtime.cpp pnp_ransac.cpp p4p.cpp)
 
 
 # Build configuration
@@ -24,8 +23,11 @@ BuildConfig()
 
 
 
+# note, ceres 1.4 works just fine too, but there is a bug in the cmakelists of ceres 1.4 which
+# can cause eigen3 lookup failures.
+find_package(Ceres 2 REQUIRED )
 
-find_package(Ceres REQUIRED )
+add_library(libpnp utils/mlibtime.cpp pnp_ransac.cpp p4p.cpp)
 target_link_libraries(libpnp PUBLIC ceres)
 
 
