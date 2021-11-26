@@ -16,9 +16,10 @@ template<class T> inline bool root2real(T b, T c,T& r1, T& r2){
 
 
     T v=b*b -4.0*c;
-    if(v<0){
-        r1=r2=0.5*b;
-        return false;
+    if(v<=0)
+    {
+        r1=r2=-0.5*b;
+        return v>=0;
     }
 
     T y=std::sqrt(v);
