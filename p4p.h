@@ -2,7 +2,7 @@
 /* ********************************* FILE ************************************/
 /** \file    p4p.h
  *
- * \brief    This header contains a wrapper for kneips p3p solver
+ * \brief    This header contains a wrapper for the lambdatwist p3p solver
  *
  * \remark
  * - c++11
