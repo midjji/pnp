@@ -12,7 +12,7 @@ In my experience the latter wins in every case except very high inlier noise, so
 
 
 
-Pnp estimates the pose of a camera in the coorinate system of the 3d points used. 
+Pnp estimates the pose of a camera in the coordinate system of the 3d points used. 
 So if you have a pinhole camera observations y_n of 3d points x_world, the pnp(yn, x_world) will give you the pose which matches the observation model
 
 x_c = x_camera = P_cw x_w
@@ -25,6 +25,6 @@ e.g. if you have the linear intrinsics K and the observation model y_rowcol (pix
 
 then compute yn = inv(K)y_rowcol
 
-if the lens model is non-linear you will need to do invert the lens model, at least for where you are interested in it. 
+if the lens model is non-linear you will need to do invert the lens model, at least for where you are interested in it.  The best way to do this if the intrinsics are calibrated pre use as is required for pnp is to offline estimate a regularized 2d spline surface over the image and use as a lookup table. 
 
 If the camera is offset from the vehicle, i.e. you are using the observation model y_rowcol (pixels)= distort(K, th, project(Pcv Pvw x_world)) and the extrinsics (Pcv =P_camera_vehicle) are known, then normalize the coordinates as before and compute pnp Pcw, followed by finding the pose of vehicle in world as Pvw = inv(Pcv)Pcw
